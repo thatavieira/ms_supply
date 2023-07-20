@@ -1,4 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using SupplyChain.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration["dbContextSettings:ConnectionString"]; 
+builder.Services.AddDbContext<ApplicationDbContext>(options =>  
+    options.UseNpgsql(connectionString)  
+);
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -6,10 +6,14 @@ namespace SupplyChain.Models;
 [Table("Manufacturers")]
 public class Manufacturer
 {
-    public Manufacturer(int id, string name)
+    public Manufacturer(string name)
     {
-        Id = id;
         Name = name;
+    }
+
+    public Manufacturer()
+    {
+        
     }
 
     [Key]

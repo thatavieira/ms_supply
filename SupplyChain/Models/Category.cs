@@ -6,11 +6,16 @@ namespace SupplyChain.Models;
 [Table("Categories")]
 public class Category
 {
-    public Category(int id, string name)
+    public Category(string name)
     {
-        Id = id;
         Name = name;
     }
+    
+    public Category()
+    {
+        
+    }
+    
 
     [Key]
     public int Id { get; set; }

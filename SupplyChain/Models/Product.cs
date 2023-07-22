@@ -6,14 +6,18 @@ namespace SupplyChain.Models;
 [Table("Products")]
 public class Product
 {
-    public Product(int id, string name, string description, string productNumber, int categoryId, int manufacturerId)
+    public Product(string name, string description, string productNumber, int categoryId, int manufacturerId)
     {
-        Id = id;
         Name = name;
         Description = description;
         ProductNumber = productNumber;
         CategoryId = categoryId;
         ManufacturerId = manufacturerId;
+    }
+
+    public Product()
+    {
+        
     }
 
     [Key]

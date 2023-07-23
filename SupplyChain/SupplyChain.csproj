@@ -31,4 +31,9 @@
       <Folder Include="Migrations" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Remove="Views\Receiving\Delete.cshtml" />
+      <Content Remove="Views\Receiving\Edit.cshtml" />
+    </ItemGroup>
+
 </Project>

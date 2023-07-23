@@ -1,0 +1,228 @@
+@model IEnumerable<SupplyChain.Models.InventoryManagement>
+
+@{
+    ViewData["Title"] = "Movimentações por Produto";
+}
+
+<h1>Movimentações</h1>
+<h5>Relatório de Movimentação Mensal por Produto</h5>
+
+  <br/>
+  <div class="border-top"></div>
+  <br/>
+
+<section class="container">
+  <form asp-action="Index" class="row">
+    <div class="col-3">
+      <div class="input-group date" id="datepickerInitial">
+        <label for="initial" class="col-4 col-form-label">Data Inicial: </label>
+        <input  type="date" class="form-control" id="initial" name="initial"/>
+      </div>
+    </div>
+    
+    <div class="col-3">
+      <div class="input-group date" id="datepickerFinal">
+        <label for="final" class="col-4 col-form-label">Data Final: </label>
+        <input type="date" class="form-control" id="final" name="final"/>
+      </div>
+    </div>
+    
+    <div class="col-3">
+      <div class="input-group date" id="product">
+        <label for="product" class="col-3 col-form-label">Produto: </label>
+        @Html.DropDownList("productId", ViewData["productId"] as List<SelectListItem>, "Selecione um produto", new { @class = "form-control" })
+      </div>
+    </div>
+    
+      <div class="col-3 d-flex align-items-end justify-content-end">
+        <button type="submit" class="btn btn-primary">Filtrar Relatório</button>
+      </div>
+  </form>
+</section>
+
+@if (Model != null)
+{
+  
+  <br/>
+  <div class="border-top"></div>
+  <br/>
+  
+  <div id="chart"></div>
+  
+  <br/>
+  <div class="border-top"></div>
+  <br/>
+  
+  <section class="container">
+    <form asp-action="Index" class="row">
+      <input style="display: none;" type="number" class="form-control" id="productId" name="productId"/>
+      <div class="col-12 d-flex align-items-end justify-content-end">
+        <button type="submit" class="btn btn-primary">Exportar PDF</button>
+      </div>
+    </form>
+  </section>
+  
+  <br/>
+  <div class="border-top"></div>
+  <br/>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>
+        Produto
+      </th>
+      <th>
+        Entrada
+      </th>
+      <th>
+        Atualizado
+      </th>
+      <th>
+        Local
+      </th>
+      <th>
+        Tipo de Movimentação
+      </th>
+      <th>
+        Quantidade
+      </th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+      <tr>
+        <td>
+          @Html.DisplayFor(modelItem => item.Product.Description)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.CreateAt)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.UpdateAt)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.Local)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+      </tr>
+    }
+    </tbody>
+  </table>
+}
+
+<script src="~/lib/apexcharts/dist/apexcharts.min.js"></script>
+<script>
+  var dayData = @Html.Raw(Json.Serialize(ViewData["Day"]));
+  var receivingData = @Html.Raw(Json.Serialize(ViewData["Receiving"]));
+  var shippingData = @Html.Raw(Json.Serialize(ViewData["Shipping"]));
+  var product = @Html.Raw(Json.Serialize(ViewData["product"]));
+  var initialDate = @Html.Raw(Json.Serialize(ViewData["initialDate"]));
+  var finalDate = @Html.Raw(Json.Serialize(ViewData["finalDate"]));
+ 
+ 
+        var options = {
+          series: [{
+          name: 'entrada',
+          type: 'column',
+          data: receivingData
+        }, {
+          name: 'saída',
+          type: 'column',
+          data: shippingData
+        }],
+          chart: {
+          height: 350,
+          type: 'line',
+          stacked: false
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          width: [1, 1, 4]
+        },
+        title: {
+          text: `Movimentação do produto ${product} no período de ${initialDate} ${finalDate}`,
+          align: 'left',
+          offsetX: 110
+        },
+        xaxis: {
+          categories: dayData
+        },
+        yaxis: [
+          {
+            axisTicks: {
+              show: true,
+            },
+            axisBorder: {
+              show: true,
+              color: '#008FFB'
+            },
+            labels: {
+              style: {
+                colors: '#008FFB',
+              }
+            },
+            title: {
+              text: "Entrada de mercadorias (no período)",
+              style: {
+                color: '#008FFB',
+              }
+            },
+            tooltip: {
+              enabled: true
+            }
+          },
+          {
+            seriesName: 'Income',
+            opposite: true,
+            axisTicks: {
+              show: true,
+            },
+            axisBorder: {
+              show: true,
+              color: '#00E396'
+            },
+            labels: {
+              style: {
+                colors: '#00E396',
+              }
+            },
+            title: {
+              text: "Saída de mercadorias (no período)",
+              style: {
+                color: '#00E396',
+              }
+            },
+          },
+        ],
+        tooltip: {
+          fixed: {
+            enabled: true,
+            position: 'topLeft', // topRight, topLeft, bottomRight, bottomLeft
+            offsetY: 30,
+            offsetX: 60
+          },
+        },
+        legend: {
+          horizontalAlign: 'left',
+          offsetX: 40
+        }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+      
+        $(function(){
+          $('#datepicker').datepicker();
+        });
+</script>
+

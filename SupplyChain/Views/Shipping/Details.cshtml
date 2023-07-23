@@ -1,47 +1,41 @@
 @model SupplyChain.Models.InventoryManagement
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes da Entrada";
 }
 
-<h1>Details</h1>
+<h1>Detalhes</h1>
 
 <div>
-    <h4>InventoryManagement</h4>
+    <h4>Saída de Mercadoria</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Product)
+            Produto
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Product.Description)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreateAt)
+            Saída
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CreateAt)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdateAt)
+            Atualizado
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.UpdateAt)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Local)
+            Local
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Local)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Type)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Type)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Quantity)
+            Quantidade
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Quantity)
@@ -49,6 +43,5 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Voltar</a>
 </div>

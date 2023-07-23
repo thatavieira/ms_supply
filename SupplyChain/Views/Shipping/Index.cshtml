@@ -1,34 +1,28 @@
 @model IEnumerable<SupplyChain.Models.InventoryManagement>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Saída de Mercadoria";
 }
 
-<h1>Index</h1>
+<h1>Saída de Mercadoria</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Adicionar Saída</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Product)
+                Produto
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreateAt)
+                Data/Hora
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UpdateAt)
+                Local
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Local)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantity)
+                Quantidade
             </th>
             <th></th>
         </tr>
@@ -43,21 +37,13 @@
                 @Html.DisplayFor(modelItem => item.CreateAt)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UpdateAt)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Local)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> 
             </td>
         </tr>
 }

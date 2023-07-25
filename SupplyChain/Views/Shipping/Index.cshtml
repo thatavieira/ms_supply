@@ -1,0 +1,51 @@
+@model IEnumerable<SupplyChain.Models.InventoryManagement>
+
+@{
+    ViewData["Title"] = "Saída de Mercadoria";
+}
+
+<h1>Saída de Mercadoria</h1>
+
+<p>
+    <a asp-action="Create">Adicionar Saída</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Produto
+            </th>
+            <th>
+                Data/Hora
+            </th>
+            <th>
+                Local
+            </th>
+            <th>
+                Quantidade
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Local)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

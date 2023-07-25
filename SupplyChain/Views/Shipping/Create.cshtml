@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ProductId" class="control-label">Produto</label>
-                <select asp-for="ProductId" class ="form-control" asp-items="ViewBag.ProductId"></select>
+                @Html.DropDownList("ProductId", ViewData["ProductId"] as List<SelectListItem>, "Selecione um produto", new { @class = "form-control" })
             </div>
             <div class="form-group">
                 <label asp-for="Local" class="control-label">Local</label>
@@ -26,14 +26,12 @@
                 <input asp-for="Quantity" class="form-control" />
                 <span asp-validation-for="Quantity" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Criar" class="btn btn-primary" />
-            </div>
+            <br/>
+                <div class="form-group">
+                <input type="submit" value="Criar" class="btn btn-success"/>
+                <a asp-action="Index" style="margin-right: 10px" class="btn btn-primary">Voltar</a>
+                </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Voltar</a>
 </div>
 

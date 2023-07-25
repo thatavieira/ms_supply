@@ -1,12 +1,12 @@
 @model SupplyChain.Models.Product
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Produto";
 }
 
-<h1>Edit</h1>
+<h1>Editar</h1>
 
-<h4>Product</h4>
+<h4>Produtos</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,38 +14,37 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label">Nome</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
+                <label asp-for="Description" class="control-label">Descrição</label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProductNumber" class="control-label"></label>
+                <label asp-for="ProductNumber" class="control-label">Código de Referência</label>
                 <input asp-for="ProductNumber" class="form-control" />
                 <span asp-validation-for="ProductNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
+                <label asp-for="CategoryId" class="control-label">Categoria</label>
                 <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ManufacturerId" class="control-label"></label>
+                <label asp-for="ManufacturerId" class="control-label">Fabricante</label>
                 <select asp-for="ManufacturerId" class="form-control" asp-items="ViewBag.ManufacturerId"></select>
                 <span asp-validation-for="ManufacturerId" class="text-danger"></span>
             </div>
+            <br/>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Salvar" class="btn btn-success"/>
+                <a asp-action="Index" style="margin-right: 10px" class="btn btn-primary">Voltar</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 

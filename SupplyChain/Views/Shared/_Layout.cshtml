@@ -12,7 +12,7 @@
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SupplyChain</a>
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MS Supply Chain</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -28,13 +28,13 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Create">Mercadoria</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Produto</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Create">Categoria</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Categoria</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Manufacturer" asp-action="Create">Fabricante</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Manufacturer" asp-action="Index">Fabricante</a>
                             </li>
                         </ul>
                     </li>
@@ -44,15 +44,18 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Receiving" asp-action="Index">Entrada</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Receiving" asp-action="Index">Entrada de Mercadoria</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Shipping" asp-action="Index">Saída</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Shipping" asp-action="Index">Saída de Mercadoria</a>
                             </li>
                             <li><hr class="dropdown-divider"></li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="InventoryManagement" asp-action="Index">Relatório</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="InventoryManagement" asp-action="Index">Relatório  Analítico</a>
                             </li>
+                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="InventoryManagement" asp-action="Index">Relatório Sintético</a>
+                             </li>
                         </ul>
                     </li>
                 </ul>
@@ -68,7 +71,7 @@
 
 <footer class="border-top footer text-muted">
     <div class="container">
-        &copy; 2023 - SupplyChain - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        &copy; 2023 - MS Supply Chain
     </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

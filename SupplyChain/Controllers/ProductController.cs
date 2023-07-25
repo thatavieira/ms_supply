@@ -23,7 +23,10 @@ namespace SupplyChain.Controllers
         // GET: Product
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Products.Include(p => p.Category).Include(p => p.Manufacturer);
+            var applicationDbContext = _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Manufacturer)
+                .OrderBy(i => i.Name);
             return View(await applicationDbContext.ToListAsync());
         }
 

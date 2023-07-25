@@ -24,7 +24,10 @@ namespace SupplyChain.Controllers
         // GET: Shipping
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.InventoryManagements.Where(i => i.Type == MovementType.Outbound).Include(i => i.Product);
+            var applicationDbContext = _context.InventoryManagements
+                .Where(i => i.Type == MovementType.Outbound)
+                .Include(i => i.Product)
+                .OrderByDescending(i => i.Id);
             return View(await applicationDbContext.ToListAsync());
         }
 

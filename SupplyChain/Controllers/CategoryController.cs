@@ -23,7 +23,7 @@ namespace SupplyChain.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Categories != null ? 
-                          View(await _context.Categories.ToListAsync()) :
+                          View(await _context.Categories.OrderBy(i => i.Name).ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Categories'  is null.");
         }
 

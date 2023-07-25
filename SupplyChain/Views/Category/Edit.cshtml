@@ -1,12 +1,12 @@
 @model SupplyChain.Models.Category
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Categoria";
 }
 
-<h1>Edit</h1>
+<h1>Editar</h1>
 
-<h4>Category</h4>
+<h4>Categorias</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,18 +14,17 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label">Nome</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+             <br/>
+             <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-success"/>
+                <a asp-action="Index" style="margin-right: 10px" class="btn btn-primary">Voltar</a>
+             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 

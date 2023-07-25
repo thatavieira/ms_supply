@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Data;
 using SupplyChain.Models;
 using SupplyChain.ViewModels;
+using X.PagedList;
 
 namespace SupplyChain.Controllers
 {
@@ -21,13 +18,17 @@ namespace SupplyChain.Controllers
         }
 
         // GET: Product
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
+            int pageSize = 10; 
+            int pageNumber = page;
+            
             var applicationDbContext = _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.Manufacturer)
-                .OrderBy(i => i.Name);
-            return View(await applicationDbContext.ToListAsync());
+                .OrderBy(i => i.Id);
+           
+            return View(await applicationDbContext.ToPagedListAsync(pageNumber, pageSize));
         }
 
         // GET: Product/Details/5
@@ -102,8 +103,11 @@ namespace SupplyChain.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ProductNumber,CategoryId,ManufacturerId")] Product product)
+        public async Task<IActionResult> Edit(int id,  ProductViewModel viewModel)
         {
+            var product = new Product(viewModel.Id, viewModel.Name, viewModel.Description, viewModel.ProductNumber,
+                    viewModel.CategoryId, viewModel.ManufacturerId);
+            
             if (id != product.Id)
             {
                 return NotFound();

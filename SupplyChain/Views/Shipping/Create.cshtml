@@ -7,6 +7,12 @@
 <h1>Novo Registro</h1>
 
 <h4>Saída de Mercadoria</h4>
+
+@if (ViewData["productExists"] == "exists")
+{
+    <span class="text-danger">Não é possível dar saída na quantidade informada.</span>
+}
+<br />
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,7 +20,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ProductId" class="control-label">Produto</label>
-                @Html.DropDownList("ProductId", ViewData["ProductId"] as List<SelectListItem>, "Selecione um produto", new { @class = "form-control" })
+                  @Html.DropDownList("ProductId", ViewData["ProductId"] as List<SelectListItem>, "Selecione um produto", new { @class = "form-control", required = "required"  })
+                  <span asp-validation-for="ProductId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Local" class="control-label">Local</label>

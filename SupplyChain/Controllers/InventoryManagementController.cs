@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Data;
+using X.PagedList;
 
 namespace SupplyChain.Controllers
 {
@@ -15,8 +16,11 @@ namespace SupplyChain.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int productId, DateTime initial, DateTime final)
+        public async Task<IActionResult> Index(int productId, DateTime initial, DateTime final, int page = 1)
         {
+            
+            int pageSize = 10; 
+            int pageNumber = page;
             
             ViewData["productId"] = new SelectList(_context.Products, "Id", "Name");
 
@@ -90,9 +94,12 @@ namespace SupplyChain.Controllers
                 ViewData["Day"] = day;
                 ViewData["Receiving"] = receiving;
                 ViewData["Shipping"] = shipping;
+                ViewData["prodId"] = product.Id;
                 ViewData["product"] = $"{product.Id} - {product.Name}";
                 ViewData["initialDate"] = $"{initial.Day}/{initial.Month}/{initial.Year}";
                 ViewData["finalDate"] = $"{final.Day}/{final.Month}/{final.Year}";
+                ViewData["initial"] = initialDateFormat;
+                ViewData["final"] = finalDateFormat;
 
                 string sqlQueryInventory = $@"
                     select * from ""InventoryManagements"" im
@@ -102,12 +109,42 @@ namespace SupplyChain.Controllers
                 var applicationDbContext = _context
                     .InventoryManagements.FromSqlRaw(sqlQueryInventory);
                     
-                return View(await applicationDbContext.ToListAsync());
+                return View(await applicationDbContext.ToPagedListAsync(pageNumber, pageSize));
                 
             }
 
         }
 
+
+        public async Task<IActionResult> Report(DateTime initial, DateTime final, int page = 1)
+        {
+            if (initial == DateTime.MinValue || final == DateTime.MinValue)
+            {
+                return View();
+            }
+            else
+            {
+                DateTime initialDataUtc = initial.ToUniversalTime();
+                DateTime finalDataUtc = final.ToUniversalTime();
+                string initialDateFormat = initialDataUtc.ToString("yyyy-MM-dd");
+                string finalDateFormat = finalDataUtc.ToString("yyyy-MM-dd");
+                int pageSize = 10; 
+                int pageNumber = page;
+                
+                ViewData["initial"] = initialDateFormat;
+                ViewData["final"] = finalDateFormat;
+                
+                var applicationDbContext = _context.InventoryManagements
+                    .Where(i => i.CreateAt >= initialDataUtc)
+                    .Where(i => i.CreateAt <= finalDataUtc)
+                    .OrderByDescending(i => i.CreateAt)
+                    .Include(i => i.Product);
+
+          
+                return View(await applicationDbContext.ToPagedListAsync(pageNumber, pageSize));                
+            }
+        }
+        
         private bool InventoryManagementExists(int id)
         {
           return (_context.InventoryManagements?.Any(e => e.Id == id)).GetValueOrDefault();

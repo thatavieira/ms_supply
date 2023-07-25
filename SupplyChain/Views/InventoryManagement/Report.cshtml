@@ -1,0 +1,110 @@
+@using X.PagedList.Mvc.Core
+@using PagedListRenderOptions = X.PagedList.Web.Common.PagedListRenderOptions
+@model X.PagedList.IPagedList<SupplyChain.Models.InventoryManagement> 
+
+@{
+    ViewData["Title"] = "Exportar PDF";
+}
+
+<h1>Movimentações</h1>
+<h5>Relatório de Movimentação Mensal</h5>
+
+  <br/>
+  <div class="border-top"></div>
+  <br/>
+
+<section class="container">
+  <form asp-action="Report" class="row">
+    <div class="col-3">
+      <div class="input-group date" id="datepickerInitial">
+        <label for="initial" class="col-4 col-form-label">Data Inicial: </label>
+        @Html.TextBox("initial", ViewData["initial"], new { @class = "form-control", type = "date" })
+      </div>
+    </div>
+    
+    <div class="col-3">
+      <div class="input-group date" id="datepickerFinal">
+        <label for="final" class="col-4 col-form-label">Data Final: </label>
+        @Html.TextBox("final", ViewData["final"], new { @class = "form-control", type = "date" })
+      </div>
+    </div>
+
+    <div class="col-6 d-flex align-items-end justify-content-end">
+      <button type="submit" style="margin-right: 10px" class="btn btn-primary">Filtrar Relatório</button>
+      <a asp-action="Report" class="btn btn-primary">Exportar PDF</a>
+    </div>
+  </form>
+</section>
+
+@if (Model != null)
+{
+
+  <br/>
+  <div class="border-top"></div>
+  <br/>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>
+        Produto
+      </th>
+      <th>
+        Entrada
+      </th>
+      <th>
+        Atualizado
+      </th>
+      <th>
+        Local
+      </th>
+      <th>
+        Tipo de Movimentação
+      </th>
+      <th>
+        Quantidade
+      </th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+      <tr>
+        <td>
+          @Html.DisplayFor(modelItem => item.Product.Name)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.CreateAt)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.UpdateAt)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.Local)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+      </tr>
+    }
+    </tbody>
+  </table>
+  
+  <nav aria-label="page navigation">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, initial = ViewData["initial"], final = ViewData["final"] }), 
+      new PagedListRenderOptions
+    {
+      DisplayEllipsesWhenNotShowingAllPageNumbers = false,
+      LinkToPreviousPageFormat = "<span aria-hidden=\"true\">&laquo;</span>",
+      LinkToNextPageFormat = "<span aria-hidden=\"true\">&raquo;</span>",
+      MaximumPageNumbersToDisplay = 5,
+      UlElementClasses = new[] { "pagination" }, 
+      LiElementClasses = new[] { "page-item" }, 
+      PageClasses = new[] { "page-link" } 
+    })
+  </nav>
+}

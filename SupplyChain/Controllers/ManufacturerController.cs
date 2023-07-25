@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using X.PagedList;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Data;
 using SupplyChain.Models;
+
 
 namespace SupplyChain.Controllers
 {
@@ -20,11 +17,16 @@ namespace SupplyChain.Controllers
         }
 
         // GET: Manufacturer
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
+            int pageSize = 10; 
+            int pageNumber = page;
+            
               return _context.Manufacturers != null ? 
-                          View(await _context.Manufacturers.OrderBy(i => i.Name).ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Manufacturers'  is null.");
+                          View(_context.Manufacturers
+                              .OrderBy(i => i.Id)
+                              .ToPagedList(pageNumber, pageSize)):
+              Problem("Entity set 'ApplicationDbContext.Manufacturers'  is null.");
         }
 
         // GET: Manufacturer/Details/5
@@ -126,11 +128,18 @@ namespace SupplyChain.Controllers
                 return NotFound();
             }
 
-            var manufacturer = await _context.Manufacturers
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var manufacturer = await _context.Manufacturers.FirstOrDefaultAsync(m => m.Id == id);
+            var product =  _context.Products.Where(p => p.ManufacturerId  == id).Count();
+            
             if (manufacturer == null)
             {
                 return NotFound();
+            }
+
+            if (product > 0)
+            {
+                ViewData["productExists"] = "exists";
+                
             }
 
             return View(manufacturer);
@@ -146,13 +155,23 @@ namespace SupplyChain.Controllers
                 return Problem("Entity set 'ApplicationDbContext.Manufacturers'  is null.");
             }
             var manufacturer = await _context.Manufacturers.FindAsync(id);
-            if (manufacturer != null)
+            var product =  _context.Products.Where(p => p.ManufacturerId == id).Count();
+            
+            if (manufacturer != null && product == 0)
             {
                 _context.Manufacturers.Remove(manufacturer);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                ViewData["productExists"] = "exists";
+                return View(manufacturer);
             }
             
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            
+            
+            
         }
 
         private bool ManufacturerExists(int id)

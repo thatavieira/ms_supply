@@ -6,6 +6,16 @@ namespace SupplyChain.Models;
 [Table("Products")]
 public class Product
 {
+    public Product(int id, string name, string description, string productNumber, int categoryId, int manufacturerId)
+    {
+        Id = id;
+        Name = name;
+        Description = description;
+        ProductNumber = productNumber;
+        CategoryId = categoryId;
+        ManufacturerId = manufacturerId;
+    }
+    
     public Product(string name, string description, string productNumber, int categoryId, int manufacturerId)
     {
         Name = name;
@@ -35,15 +45,13 @@ public class Product
     [StringLength(20, MinimumLength = 3, ErrorMessage = "O nome deve ser maior que 3 caracteres.")]
     public string ProductNumber { get; set; }
     
-    [Required(ErrorMessage = "Por favor, digite uma CategoryID.")]
-    [StringLength(60, MinimumLength = 10, ErrorMessage = "O nome deve ser maior que 10 caracteres.")]
+    [Required(ErrorMessage = "Por favor, selecione uma categoria.")]
     public int CategoryId  { get; set; }
     
     [ForeignKey("CategoryId")]
     public  Category Category { get; set; }
     
-    [Required(ErrorMessage = "Por favor, digite uma ManufacturerId.")]
-    [StringLength(60, MinimumLength = 10, ErrorMessage = "O nome deve ser maior que 10 caracteres.")]
+    [Required(ErrorMessage = "Por favor, selecione um fabricante.")]
     public int ManufacturerId { get; set; }
     
     [ForeignKey("ManufacturerId")]

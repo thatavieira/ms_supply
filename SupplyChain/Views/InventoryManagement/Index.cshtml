@@ -1,4 +1,8 @@
-@model IEnumerable<SupplyChain.Models.InventoryManagement>
+@using X.PagedList.Mvc.Core
+@using PagedListRenderOptions = X.PagedList.Web.Common.PagedListRenderOptions
+@model X.PagedList.IPagedList<SupplyChain.Models.InventoryManagement> 
+
+
 
 @{
     ViewData["Title"] = "Movimentações por Produto";
@@ -16,14 +20,14 @@
     <div class="col-3">
       <div class="input-group date" id="datepickerInitial">
         <label for="initial" class="col-4 col-form-label">Data Inicial: </label>
-        <input  type="date" class="form-control" id="initial" name="initial"/>
+        @Html.TextBox("initial", ViewData["initial"], new { @class = "form-control", type = "date" })
       </div>
     </div>
     
     <div class="col-3">
       <div class="input-group date" id="datepickerFinal">
         <label for="final" class="col-4 col-form-label">Data Final: </label>
-        <input type="date" class="form-control" id="final" name="final"/>
+        @Html.TextBox("final", ViewData["final"], new { @class = "form-control", type = "date" })
       </div>
     </div>
     
@@ -116,6 +120,20 @@
     }
     </tbody>
   </table>
+  
+  <nav aria-label="page navigation">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, initial = ViewData["initial"], final = ViewData["final"], productId = ViewData["prodId"] }), 
+      new PagedListRenderOptions
+    {
+      DisplayEllipsesWhenNotShowingAllPageNumbers = false,
+      LinkToPreviousPageFormat = "<span aria-hidden=\"true\">&laquo;</span>",
+      LinkToNextPageFormat = "<span aria-hidden=\"true\">&raquo;</span>",
+      MaximumPageNumbersToDisplay = 5,
+      UlElementClasses = new[] { "pagination" }, 
+      LiElementClasses = new[] { "page-item" }, 
+      PageClasses = new[] { "page-link" } 
+    })
+  </nav>
 }
 
 <script src="~/lib/apexcharts/dist/apexcharts.min.js"></script>

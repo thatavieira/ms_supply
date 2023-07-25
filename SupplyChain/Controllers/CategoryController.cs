@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using X.PagedList;
 using Microsoft.EntityFrameworkCore;
 using SupplyChain.Data;
 using SupplyChain.Models;
@@ -20,10 +16,17 @@ namespace SupplyChain.Controllers
         }
 
         // GET: Category
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
+            
+            int pageSize = 10; 
+            int pageNumber = page;
+            
               return _context.Categories != null ? 
-                          View(await _context.Categories.OrderBy(i => i.Name).ToListAsync()) :
+                          View(_context.Categories
+                              .OrderBy(i => i.Id)
+                              .ToPagedList(pageNumber, pageSize)
+                          ) :
                           Problem("Entity set 'ApplicationDbContext.Categories'  is null.");
         }
 
@@ -126,11 +129,18 @@ namespace SupplyChain.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var category = await _context.Categories.FirstOrDefaultAsync(m => m.Id == id);
+            var product =  _context.Products.Where(p => p.CategoryId == id).Count();
+            
             if (category == null)
             {
                 return NotFound();
+            }
+
+            if (product > 0)
+            {
+                ViewData["productExists"] = "exists";
+                
             }
 
             return View(category);
@@ -146,13 +156,20 @@ namespace SupplyChain.Controllers
                 return Problem("Entity set 'ApplicationDbContext.Categories'  is null.");
             }
             var category = await _context.Categories.FindAsync(id);
-            if (category != null)
+            var product =  _context.Products.Where(p => p.CategoryId == id).Count();
+            
+            
+            if (category != null && product == 0)
             {
                 _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                ViewData["productExists"] = "exists";
+                return View(category);
+            }
         }
 
         private bool CategoryExists(int id)

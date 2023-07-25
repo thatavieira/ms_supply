@@ -14,7 +14,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ProductId" class="control-label">Produto</label>
-                @Html.DropDownList("ProductId", ViewData["ProductId"] as List<SelectListItem>, "Selecione um produto", new { @class = "form-control" })
+                @Html.DropDownList("ProductId", ViewData["ProductId"] as List<SelectListItem>, "Selecione um produto", new { @class = "form-control", required = "required"  })
+                <span asp-validation-for="ProductId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Local" class="control-label">Local</label>

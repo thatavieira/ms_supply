@@ -1,4 +1,6 @@
-@model IEnumerable<SupplyChain.Models.Manufacturer>
+@using X.PagedList.Mvc.Core
+@using PagedListRenderOptions = X.PagedList.Web.Common.PagedListRenderOptions
+@model X.PagedList.IPagedList<SupplyChain.Models.Manufacturer> 
 
 @{
     ViewData["Title"] = "Fabricantes";
@@ -53,3 +55,16 @@
 }
     </tbody>
 </table>
+
+<nav aria-label="page navigation">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+    {
+        DisplayEllipsesWhenNotShowingAllPageNumbers = false,
+        LinkToPreviousPageFormat = "<span aria-hidden=\"true\">&laquo;</span>",
+        LinkToNextPageFormat = "<span aria-hidden=\"true\">&raquo;</span>",
+        MaximumPageNumbersToDisplay = 5,
+        UlElementClasses = new[] { "pagination" }, 
+        LiElementClasses = new[] { "page-item" }, 
+        PageClasses = new[] { "page-link" } 
+    })
+</nav>

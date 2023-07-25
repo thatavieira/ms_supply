@@ -19,7 +19,8 @@ public class Manufacturer
     [Key]
     public int Id { get; set; }
     
-    [Required]
+    [Required(ErrorMessage = "Por favor, digite um nome para o Fabricante.")]
+    [StringLength(30, MinimumLength = 5, ErrorMessage = "O nome deve ser maior que 5 caracteres.")]
     public string Name { get; set; }
     
 }

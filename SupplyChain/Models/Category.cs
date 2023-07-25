@@ -20,7 +20,8 @@ public class Category
     [Key]
     public int Id { get; set; }
     
-    [Required]
+    [Required(ErrorMessage = "Por favor, digite um nome para categoria.")]
+    [StringLength(30, MinimumLength = 10, ErrorMessage = "O nome deve ser maior que 10 caracteres.")]
     public string Name { get; set; }
     
 }

@@ -10,20 +10,18 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" id="createCategory">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label">Nome</label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" name="Name" class="form-control" required />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-           <br/>
-              <div class="form-group">
-              <input type="submit" value="Criar" class="btn btn-success"/>
-              <a asp-action="Index" style="margin-right: 10px" class="btn btn-primary">Voltar</a>
-           </div>
+            <br/>
+            <div class="form-group">
+                <input type="submit" value="Criar" class="btn btn-success"/>
+                <a asp-action="Index" style="margin-right: 10px" class="btn btn-primary">Voltar</a>
+            </div>
         </form>
     </div>
 </div>
-
-

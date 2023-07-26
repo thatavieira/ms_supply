@@ -1,37 +1,58 @@
-@model IEnumerable<SupplyChain.Models.InventoryManagement>
+@using X.PagedList.Mvc.Core
+@using PagedListRenderOptions = X.PagedList.Web.Common.PagedListRenderOptions
+@model X.PagedList.IPagedList<SupplyChain.Models.InventoryManagement> 
 
 @{
     ViewData["Title"] = "Entrada";
 }
 
-<h1>Entrada de Mercadoria</h1>
+<h1>Entrada</h1>
+<h5>Entrada de Mercadorias</h5>
 
-<p>
-    <a asp-action="Create">Adicionar Entrada</a>
-</p>
+<br/>
+  <div class="border-top"></div>
+  <br/>
+  
+  <section class="container">
+    <div class="row">
+        <div class="col-12 d-flex align-items-end justify-content-end">
+            <a class="btn btn-success" asp-action="Create">Adicionar Entrada</a>
+        </div>
+    </div>
+  </section>
+  
+  <br/>
+  <div class="border-top"></div>
+<br/>
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                Produto
-            </th>
-            <th>
-                Data/Hora
-            </th>
-            <th>
-                Local
-            </th>
-            <th>
-                Quantidade
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            ID
+        </th>
+        <th>
+            Produto
+        </th>
+        <th>
+            Data/Hora
+        </th>
+        <th>
+            Local
+        </th>
+        <th>
+            Quantidade
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Product.Description)
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreateAt)
@@ -42,10 +63,24 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> 
+            <td class="d-flex align-items-end justify-content-end">
+                <a asp-action="Details" style="margin-right: 10px" class="btn btn-secondary"  asp-route-id="@item.Id">Detalhar</a>
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>
+
+<nav aria-label="page navigation">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+    {
+        DisplayEllipsesWhenNotShowingAllPageNumbers = false,
+        LinkToPreviousPageFormat = "<span aria-hidden=\"true\">&laquo;</span>",
+        LinkToNextPageFormat = "<span aria-hidden=\"true\">&raquo;</span>",
+        MaximumPageNumbersToDisplay = 5,
+        UlElementClasses = new[] { "pagination" }, 
+        LiElementClasses = new[] { "page-item" }, 
+        PageClasses = new[] { "page-link" } 
+    })
+</nav>
+

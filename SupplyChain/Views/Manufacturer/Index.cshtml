@@ -1,19 +1,38 @@
-@model IEnumerable<SupplyChain.Models.Manufacturer>
+@using X.PagedList.Mvc.Core
+@using PagedListRenderOptions = X.PagedList.Web.Common.PagedListRenderOptions
+@model X.PagedList.IPagedList<SupplyChain.Models.Manufacturer> 
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Fabricantes";
 }
 
-<h1>Index</h1>
+<h1>Fabricantes</h1>
+<h5>Cadastro de Fabricantes</h5>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<br/>
+  <div class="border-top"></div>
+  <br/>
+  
+  <section class="container">
+    <div class="row">
+        <div class="col-12 d-flex align-items-end justify-content-end">
+            <a class="btn btn-success" asp-action="Create">Adicionar Fabricante</a>
+        </div>
+    </div>
+  </section>
+  
+  <br/>
+  <div class="border-top"></div>
+<br/>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                ID
+            </th>
+            <th>
+                Nome
             </th>
             <th></th>
         </tr>
@@ -21,15 +40,31 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            <td class="d-flex align-items-end justify-content-end">
+                <a asp-action="Edit" style="margin-right: 10px" class="btn btn-primary"  asp-route-id="@item.Id">Editar</a> 
+                <a asp-action="Details" style="margin-right: 10px" class="btn btn-secondary"  asp-route-id="@item.Id">Detalhar</a> 
+                <a asp-action="Delete" class="btn btn-danger"  asp-route-id="@item.Id">Deletar</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+<nav aria-label="page navigation">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+    {
+        DisplayEllipsesWhenNotShowingAllPageNumbers = false,
+        LinkToPreviousPageFormat = "<span aria-hidden=\"true\">&laquo;</span>",
+        LinkToNextPageFormat = "<span aria-hidden=\"true\">&raquo;</span>",
+        MaximumPageNumbersToDisplay = 5,
+        UlElementClasses = new[] { "pagination" }, 
+        LiElementClasses = new[] { "page-item" }, 
+        PageClasses = new[] { "page-link" } 
+    })
+</nav>

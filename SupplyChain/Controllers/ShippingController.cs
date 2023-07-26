@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +5,7 @@ using SupplyChain.Data;
 using SupplyChain.Enums;
 using SupplyChain.Models;
 using SupplyChain.ViewModels;
+using X.PagedList;
 
 namespace SupplyChain.Controllers
 {
@@ -22,10 +19,17 @@ namespace SupplyChain.Controllers
         }
 
         // GET: Shipping
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var applicationDbContext = _context.InventoryManagements.Where(i => i.Type == MovementType.Outbound).Include(i => i.Product);
-            return View(await applicationDbContext.ToListAsync());
+            int pageSize = 10; 
+            int pageNumber = page;
+            
+            var applicationDbContext = _context.InventoryManagements
+                .Where(i => i.Type == MovementType.Outbound)
+                .Include(i => i.Product)
+                .OrderByDescending(i => i.Id);
+            
+            return View(await applicationDbContext.ToPagedListAsync(pageNumber, pageSize));
         }
 
         // GET: Shipping/Details/5
@@ -50,7 +54,7 @@ namespace SupplyChain.Controllers
         // GET: Shipping/Create
         public IActionResult Create()
         {
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Description");
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name");
             return View();
         }
 
@@ -64,14 +68,31 @@ namespace SupplyChain.Controllers
 
             var shipping =
                 new InventoryManagement(viewModel.ProductId, viewModel.Local, viewModel.Type, viewModel.Quantity);
-            if (ModelState.IsValid)
+      
+            var inbound =  _context.InventoryManagements
+                .Where(i => i.Type == MovementType.Inbound)
+                .Where(i => i.ProductId == shipping.ProductId)
+                .Select(i => i.Quantity).Sum();
+            
+            var outbound =  _context.InventoryManagements
+                .Where(i => i.Type == MovementType.Outbound)
+                .Where(i => i.ProductId == shipping.ProductId)
+                .Select(i => i.Quantity).Sum();
+
+            var totalOutbound = outbound + shipping.Quantity;
+            
+            if (ModelState.IsValid &  inbound >= totalOutbound)
             {
                 _context.Add(shipping);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Description");
-            return View(shipping);
+            else
+            {
+                ViewData["productExists"] = "exists";
+                ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Description");
+                return View(shipping);
+            }
         }
         
         private bool InventoryManagementExists(int id)

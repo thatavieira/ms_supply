@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +5,7 @@ using SupplyChain.Data;
 using SupplyChain.Enums;
 using SupplyChain.Models;
 using SupplyChain.ViewModels;
+using X.PagedList;
 
 namespace SupplyChain.Controllers
 {
@@ -20,12 +17,19 @@ namespace SupplyChain.Controllers
         {
             _context = context;
         }
-
-        // GET: Receiving
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var applicationDbContext = _context.InventoryManagements.Where(i => i.Type == MovementType.Inbound).Include(i => i.Product);
-            return View(await applicationDbContext.ToListAsync());
+            int pageSize = 10; 
+            int pageNumber = page;
+
+            var applicationDbContext = _context.InventoryManagements
+                .Where(i => i.Type == MovementType.Inbound)
+                .Include(i => i.Product)
+                .OrderByDescending(i => i.Id);
+
+
+            return View(await applicationDbContext.ToPagedListAsync(pageNumber, pageSize));
+
         }
 
         // GET: Receiving/Details/5
@@ -50,7 +54,7 @@ namespace SupplyChain.Controllers
         // GET: Receiving/Create
         public IActionResult Create()
         {
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Description");
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name");
             return View();
         }
 
@@ -59,7 +63,7 @@ namespace SupplyChain.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ReceivingViewModel viewModel )
+        public async Task<IActionResult> Create(ReceivingViewModel viewModel)
         {
             var receiving = new InventoryManagement(viewModel.ProductId, viewModel.Local, viewModel.Type, viewModel.Quantity);
             
@@ -69,6 +73,7 @@ namespace SupplyChain.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Description");
             return View(receiving);
         }

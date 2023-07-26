@@ -28,7 +28,7 @@ public class InventoryManagement
     [Key]
     public int Id { get; set; }
     
-    [Required]
+    [Required(ErrorMessage = "Por favor, selecione um produto.")]
     public int ProductId { get; set; }
     
     [ForeignKey("ProductId")]
@@ -40,13 +40,15 @@ public class InventoryManagement
     [Required]
     public DateTime UpdateAt { get; set; }
     
-    [Required]
+    [Required(ErrorMessage = "Por favor, digite um local")]
+    [StringLength(20, MinimumLength = 5, ErrorMessage = "O local deve ser maior que 5 caracteres.")]
     public string Local { get; set; }
     
     [Required]
     public MovementType Type { get; set; }
     
-    [Required]
+    [Required(ErrorMessage = "Por favor, digite um quantidade válida")]
+    [Range(1, int.MaxValue, ErrorMessage = "A quantidade deve ser maior que zero.")]
     public int Quantity { get; set; }
     
     
